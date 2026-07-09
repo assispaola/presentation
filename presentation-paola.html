@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Presentation - Paola</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-deep: #f63d72;
+    --pink-bright: #ef6f93;
+    --peach: #ffb199;
+    --cream: #fff6f0;
+    --paper: #fffaf6;
+    --ink: #4a3540;
+    --ink-soft: #8a6b78;
+    --tape: #edc381;
+    --line: #f1cdd8;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Quicksand', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 10%, #ffe3ec 0%, transparent 45%),
+      radial-gradient(circle at 90% 85%, #ffe0cf 0%, transparent 40%),
+      var(--cream);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: 24px 16px;
+    min-height:100vh;
+  }
+  .header{
+    width:100%;
+    max-width: 920px;
+    background: linear-gradient(120deg, var(--pink-deep), var(--pink-bright));
+    border-radius: 22px;
+    padding: 14px 24px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow: 0 10px 24px rgba(224,80,122,0.25);
+    margin-bottom: 22px;
+  }
+  .header .emoji{font-size: 26px;}
+  .header h1{
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 26px;
+    color: #fff;
+    margin:0;
+    font-weight:700;
+    line-height:1;
+  }
+  .header p{
+    margin:2px 0 0;
+    color: #ffe3ec;
+    font-size: 12px;
+    letter-spacing:.3px;
+  }
+
+  .stage{
+    width:100%;
+    max-width: 920px;
+    aspect-ratio: 16 / 9;
+    position: relative;
+  }
+
+  .card{
+    position:absolute;
+    inset:0;
+    background: var(--paper);
+    border-radius: 26px;
+    padding: 30px 34px;
+    box-shadow: 0 18px 38px rgba(224,80,122,0.16), 0 2px 6px rgba(0,0,0,0.03);
+    border: 1px solid var(--line);
+    opacity:0;
+    transform: translateX(24px) scale(0.98);
+    pointer-events:none;
+    transition: opacity .38s ease, transform .38s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    overflow:visible;
+  }
+  .card.active{
+    opacity:1;
+    transform: translateX(0) scale(1);
+    pointer-events:auto;
+  }
+  .card.prev{
+    transform: translateX(-24px) scale(0.98);
+  }
+
+  .slide-tag{
+    position:absolute;
+    top:-14px;
+    left:30px;
+    background: #c918f5;
+    color:#fff;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:6px 14px;
+    border-radius:999px;
+  }
+
+  /* ---- Cover slide ---- */
+  .cover{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap: 18px;
+    height:100%;
+    overflow:auto;
+  }
+  .cover .kicker{
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform:uppercase;
+    color: var(--pink-bright);
+    font-weight:700;
+  }
+  .cover h1.big-title{
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: clamp(48px, 9vw, 92px);
+    line-height: 0.95;
+    margin: 0;
+    background: linear-gradient(120deg, var(--pink-deep), #c918f5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+  }
+  .cover .cover-sub{
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 420px;
+  }
+  .cover-photo{
+    width: 210px;
+    background: #fff;
+    padding: 12px 12px 30px;
+    border-radius: 4px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.14);
+    transform: rotate(-3deg);
+    position: relative;
+    margin-top: 6px;
+  }
+  .cover-photo .photo-box{ aspect-ratio: 1/1; }
+  .cover-photo .cap{
+    font-family: "Bricolage Grotesque", sans-serif;
+    text-align:center;
+    font-size:16px;
+    margin-top:8px;
+    color: var(--ink-soft);
+  }
+
+  /* ---- Person slides ---- */
+  .card-inner{
+    display:flex;
+    gap:30px;
+    align-items:center;
+    height:100%;
+    overflow:auto;
+  }
+  @media (max-width:680px){
+    .card-inner{flex-direction:column; align-items:center; text-align:left; height:auto;}
+  }
+
+  .photos{
+    flex: 0 0 auto;
+    display:flex;
+    gap: 18px;
+  }
+  @media (max-width:680px){
+    .photos{ justify-content:center; }
+  }
+
+  .polaroid{
+    flex: 0 0 190px;
+    background: #fff;
+    padding: 12px 12px 30px;
+    border-radius: 4px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.14);
+    transform: rotate(var(--rot, -3deg));
+    position: relative;
+  }
+  .photo-box{
+    width: 100%;
+    aspect-ratio: 1 / 1.05;
+    border: 2px dashed #e8b9c6;
+    border-radius: 2px;
+    background: repeating-linear-gradient(135deg, #fff0f4, #fff0f4 10px, #fff8fa 10px, #fff8fa 20px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding: 8px;
+    line-height:1.4;
+  }
+  .polaroid .cap{
+    font-family: "Bricolage Grotesque", sans-serif;
+    text-align:center;
+    font-size:16px;
+    margin-top:8px;
+    color: var(--ink-soft);
+  }
+  .tape{
+    position:absolute;
+    width: 62px;
+    height: 22px;
+    background: var(--tape);
+    opacity:0.85;
+    top:-10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  }
+
+  .text-block{ flex:1; min-width:0; }
+  .name-row{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:8px;
+  }
+  .name-row h2{
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 30px;
+    margin:0;
+    color: var(--pink-deep);
+  }
+  .nickname{
+    font-size: 12px;
+    background: var(--line);
+    color: var(--pink-deep);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight:600;
+  }
+  .paragraph{
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+  .paragraph .fill{
+    color: var(--pink-bright);
+    font-weight:700;
+    border-bottom: 2px dotted var(--pink-bright);
+    padding: 0 2px;
+  }
+  .traits{
+    margin-top: 12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap: 8px;
+  }
+  .traits span{
+    font-size:11px;
+    background: #fff0f4;
+    border: 1px solid var(--line);
+    color: var(--pink-deep);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  /* Controls */
+  .controls{
+    width:100%;
+    max-width: 920px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top: 22px;
+    gap: 16px;
+  }
+  .nav-btn{
+    background: #c918f5;
+    border:none;
+    color:#fff;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 8px 18px rgba(224,80,122,0.35);
+    transition: transform .15s ease, box-shadow .15s ease;
+    flex-shrink:0;
+  }
+  .nav-btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(224,80,122,0.45); }
+  .nav-btn:active{ transform: translateY(0) scale(0.95); }
+  .nav-btn:disabled{
+    opacity:0.35;
+    cursor:default;
+    transform:none;
+    box-shadow:none;
+  }
+
+  .dots{
+    display:flex;
+    gap:8px;
+  }
+  .dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background: var(--line);
+    transition: background .2s ease, transform .2s ease;
+  }
+  .dot.active{
+    background: var(--pink-deep);
+    transform: scale(1.25);
+  }
+
+  .counter{
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 20px;
+    color: var(--pink-deep);
+    min-width: 54px;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage" id="stage">
+
+    <div class="card" data-index="0">
+      <span class="slide-tag">Slide 0 · Cover</span>
+      <div class="cover">
+        <span class="kicker">english class</span>
+        <h1 class="big-title">PRESENTATION</h1>
+
+        <div class="cover-photo">
+          <div class="tape"></div>
+          <div class="photo-box">
+            <img src="./capa.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+          </div>
+          <div class="cap">welcome!</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-index="1">
+      <span class="slide-tag">Slide 1 · Me</span>
+      <div class="card-inner">
+        <div class="photos">
+          <div class="polaroid" style="--rot:-5deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+                <img src="./paola-1.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">this is me!</div>
+          </div>
+          <div class="polaroid" style="--rot:4deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+                <img src="./paola-2.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">& this too</div>
+          </div>
+        </div>
+        <div class="text-block">
+          <div class="name-row">
+            <h2>Paola Assis</h2>
+            <span class="nickname">Lola</span>
+          </div>
+          <p class="paragraph">
+            This is me, <span class="fill">Paola.</span> My nickname has always been <span class="fill">Lola.</span> I am <span class="fill">32 years old</span> and <span class="fill">Italian-Brazilian.</span> When I was a child, my mother always said I was a <span class="fill">happy, cheerful, and smiling</span> girl. I loved playing, using my imagination, and studying <span class="fill">Science.</span> I used to say that I wanted to become a <span class="fill">chemical engineer or a dentist.</span>
+
+            Today, I work as a <span class="fill">systems developer.</span> I still have the same <span class="fill">happy and curious</span> spirit. I love learning new things, being creative, creating digital experiences, and solving problems. In my free time, I enjoy <span class="fill">coloring books, watching TV series, going out, dancing,</span> and spending time with <span class="fill">my husband, Bruno,</span> and the people I love.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-index="2">
+      <span class="slide-tag">Slide 2 · Bruno</span>
+      <div class="card-inner">
+        <div class="photos">
+          <div class="polaroid" style="--rot:3deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+                <img src="./bruno-1.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">my husband</div>
+          </div>
+          <div class="polaroid" style="--rot:-4deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+                <img src="./bruno-2.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">& us together</div>
+          </div>
+        </div>
+        <div class="text-block">
+          <div class="name-row">
+            <h2>Bruno Assis</h2>
+            <span class="nickname">Bruno</span>
+          </div>
+          <p class="paragraph">
+            This is my husband, <span class="fill">Bruno Heming.</span> He doesn't have a nickname. He is <span class="fill">31 years old</span> and <span class="fill">Brazilian.</span> He works as a<span class="fill">warehouse assistant.</span> He lives with me in <span class="fill">Indaiatuba, São Paulo.</span> In his free time, he enjoys <span class="fill">playing Roblox and video games in general</span> —he's really good at them. He also likes watching anime and spending quality time together with me and our family.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-index="3">
+      <span class="slide-tag">Slide 3 · My mother</span>
+      <div class="card-inner">
+        <div class="photos">
+          <div class="polaroid" style="--rot:-4deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+              <img src="./sonia-1.jpeg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">my mom and me</div>
+          </div>
+          <div class="polaroid" style="--rot:5deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+              <img src="./sonia-2.jpeg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">& her cats</div>
+          </div>
+        </div>
+        <div class="text-block">
+          <div class="name-row">
+            <h2>Sonia Assis</h2>
+            <span class="nickname">Soso</span>
+          </div>
+          <p class="paragraph">
+        This is my mother, <span class="fill">Sonia Assis.</span> Her nickname is <span class="fill">Soso.</span> She is <span class="fill">58 years old</span> and <span class="fill">Italian-Brazilian.</span> She currently lives alone in <span class="fill">São Paulo.</span> She has worked as an <span class="fill">administrative manager</span> at the same company for over <span class="fill">20 years.</span> In her free time, she enjoys <span class="fill">spending time with her family</span>, shopping at the mall, watching TV, and relaxing at home with her two cats, <span class="fill">Malu and Tiffany.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-index="4">
+      <span class="slide-tag">Slide 4 · My sister</span>
+      <div class="card-inner">
+        <div class="photos">
+          <div class="polaroid" style="--rot:4deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+              <img src="./natalia-1.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">my sister</div>
+          </div>
+          <div class="polaroid" style="--rot:-5deg;">
+            <div class="tape"></div>
+            <div class="photo-box">
+              <img src="./natalia-2.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:2px;">
+            </div>
+            <div class="cap">& together</div>
+          </div>
+        </div>
+        <div class="text-block">
+          <div class="name-row">
+            <h2>Natalia Assis</h2>
+            <span class="nickname">Nati</span>
+          </div>
+          <p class="paragraph">
+           This is my sister, <span class="fill">Natalia.</span> Her nickname is <span class="fill">Nati.</span> She is <span class="fill">30 years old</span> and <span class="fill">Italian-Brazilian.</span> She works as a <span class="fill">freelance designer</span> and also works full-time for an agency as a service provider. She has been living with her husband, <span class="fill">Felipe</span>, in <span class="fill">Alessandria, Italy,</span> for the past <span class="fill">two months.</span> In her free time, she enjoys <span class="fill">watching TV series, cooking, going for walks,</span> and traveling to discover new places in her new country.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prevBtn" aria-label="Slide anterior">←</button>
+    <div class="dots" id="dots"></div>
+    <div class="counter" id="counter">1 / 5</div>
+    <button class="nav-btn" id="nextBtn" aria-label="Próximo slide">→</button>
+  </div>
+
+<script>
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const total = cards.length;
+  let current = 0;
+
+  const dotsContainer = document.getElementById('dots');
+  cards.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsContainer.appendChild(d);
+  });
+  const dots = Array.from(dotsContainer.children);
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('counter');
+
+  function render(){
+    cards.forEach((card, i) => {
+      card.classList.remove('active', 'prev');
+      if(i === current){
+        card.classList.add('active');
+      } else if(i < current){
+        card.classList.add('prev');
+      }
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    counter.textContent = (current + 1) + ' / ' + total;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  prevBtn.addEventListener('click', () => {
+    if(current > 0){ current--; render(); }
+  });
+  nextBtn.addEventListener('click', () => {
+    if(current < total - 1){ current++; render(); }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight') nextBtn.click();
+    if(e.key === 'ArrowLeft') prevBtn.click();
+  });
+
+  render();
+</script>
+
+</body>
+</html>
